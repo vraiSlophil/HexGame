@@ -71,7 +71,7 @@ class Bot:
                 nouveau = board[0:i] + (joueur,) + board[i + 1:]
                 # le mettre dans L
                 L.append(nouveau)
-        # on cherche l'eval max si c'est au tour de croix, et l'eval min si c'est au tour de rond
+        # on cherche l'eval max si c'est au tour de croix et l'eval min si c'est au tour de rond
         evaluation = -joueur
         plateau_gagnant = [L[0]]
         for p in L:

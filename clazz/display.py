@@ -1,4 +1,5 @@
 import pygame
+
 from sprites.sprite_library import hexa1, hexa_1, hexa0
 
 pygame.init()
@@ -48,7 +49,7 @@ class Screen:
 
 
 class BoxSprite(pygame.sprite.Sprite):  # l'instance graphique d'une case
-    def __init__(self, box, img, imgsize):
+    def __init__(self, box_instance, img, imgsize):
         pygame.sprite.Sprite.__init__(self)
         self.image = img  # il faudra mettre 'img = pygame.image.load("imagedelhexagone")' pour éviter d'aller chercher
         # dans la memoire trop souvent

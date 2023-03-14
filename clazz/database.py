@@ -1,8 +1,5 @@
 import mariadb
 
-import main
-
-
 class Database:
     def __init__(self):
         self.__connect = mariadb.connect(
@@ -19,25 +16,27 @@ class Database:
     def get_connect(self):
         return self.__connect
 
-    def board_to_string(self):
+    # exemple de return : "0,0,0,0,0,0,1,0,0,0,0,-1,0,0,0,0"
+    def board_to_string(self, board_instance):
         L = ""
-        for box_instance in main.board.values():
-            if len(L) != self.__size ** self.__size:
+        for box_instance in board_instance.get_board().values():
+            if len(L) != board_instance.get_size() ** board_instance.get_size():
                 L.append(str(box_instance.get_color()) + ",")
             else:
                 L.append(str(box_instance.get_color()))
-        return L
-        # exemple de return : "0,0,0,0,0,0,1,0,0,0,0,-1,0,0,0,0"
 
-    def string_to_board(self, L):
-        if self.board_to_string() == L:
-            return main.board
+        return L
+
+    # return une nouvelle instance de board
+    def string_to_board(self, board_instance, L):
+        if self.board_to_string(board_instance) == L:
+            return board_instance
         lst = [int(x) for x in L.split(',')]
         index = 0
-        for box_instance in main.board.values():
+        for box_instance in board_instance.get_board().values():
             if box_instance.get_color() != lst[index]:
                 box_instance.set_color(lst[index])
             index += 1
-        return main.board
+        return board_instance
 
 

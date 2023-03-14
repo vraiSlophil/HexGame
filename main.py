@@ -1,22 +1,26 @@
 import pygame
-from pygame import K_ESCAPE, QUIT
-from sprites.sprite_library import hexa0
+from pygame import QUIT
 
 from clazz.board import Board
+from clazz.bot import Bot
 from clazz.database import Database
 from clazz.display import Screen
+from sprites.sprite_library import hexa0
 
 pygame.init()
 
 img_hex_void = hexa0
 
-screen = Screen(600, 300, [], img_hex_void)
 board = Board()
-# database = Database()
+screen = Screen(854, 480, board.get_board(), img_hex_void)
+database = Database()
+bot = Bot(board, database)
+
 # Joueur bleu = True et de couleur 1, joueur rouge = False et de couleur -1
 marche = True  # pour gérer la boucle de l'affichage
 tour = True
 fini = False
+
 clock = pygame.time.Clock()
 fps = 30
 coords_blue = []

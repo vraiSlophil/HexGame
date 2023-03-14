@@ -1,5 +1,5 @@
 class Box:
-    def __init__(self, x, y, board_instance):
+    def __init__(self, x, y, size, board_instance):
         self.__x = x
         self.__y = y
         self.__coords = (x, y)
@@ -12,10 +12,10 @@ class Box:
             self.__box_access.remove((self.__x - 1, self.__y - 1))
         if self.__y - 1 < 0:
             self.__box_access.remove((self.__x, self.__y - 1))
-        if self.__x + 1 > self.__board_instance.get_size():
+        if self.__x + 1 > size:
             self.__box_access.remove((self.__x + 1, self.__y))
             self.__box_access.remove((self.__x + 1, self.__y + 1))
-        if self.__y + 1 > self.__board_instance.get_size():
+        if self.__y + 1 > size:
             self.__box_access.remove((self.__x, self.__y + 1))
 
     def get_box_access(self):
@@ -63,4 +63,4 @@ class Box:
     def __eq__(self, other):  # other est un objet que l'on compare à l'instance de Box
         if not isinstance(other, Box):
             return False
-        return self.__x == other.get_x() and self.__y == other.get_y() and self.__coords == other.get_coords() and self.__board_instance == other._Box__board_instance and self.__color == other.get_color() and frozenset(self.__box_access) ==
+        return self.__x == other.get_x() and self.__y == other.get_y() and self.__coords == other.get_coords() and self.__board_instance == other.__board_instance and self.__color == other.get_color() and frozenset(self.__box_access) == frozenset(other.get_box_access())
