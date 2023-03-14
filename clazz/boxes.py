@@ -43,7 +43,7 @@ class Box:
         return r
 
 
-    def get_free_neighbours(self):  #renvoie les coordonnées cases vides voisines
+    def get_free_neighbours(self):  # renvoie les coordonnées des cases vides voisines
         r = []
         for i in self.__box_access:
             for k, v in self.__board_instance.get_board().items():
@@ -60,7 +60,7 @@ class Box:
     def __hash__(self):
         return hash((self.__x, self.__y, self.__coords, self.__board_instance, self.__color, frozenset(self.__box_access)))
 
-    def __eq__(self, other):
+    def __eq__(self, other):  # other est un objet que l'on compare à l'instance de Box
         if not isinstance(other, Box):
             return False
         return self.__x == other.get_x() and self.__y == other.get_y() and self.__coords == other.get_coords() and self.__board_instance == other._Box__board_instance and self.__color == other.get_color() and frozenset(self.__box_access) ==

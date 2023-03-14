@@ -1,13 +1,13 @@
 from clazz import file
 
-
 # Le bot est de couleur rouge
 class Bot:
-    def __init__(self, board_instance):
+    def __init__(self, board_instance, database_instance):
         self.__color = -1  # rouge
         # self.__n = 4
         self.__tour = False  # True si c'est au tour du bot, False sinon
         self.__board_instance = board_instance
+        self.__database_instance = database_instance
 
         self.__file = file.File()
 
@@ -44,30 +44,30 @@ class Bot:
         board = self.__database_instance.board_to_string(self.__board_instance.get_board().copy())
         #board est une liste de 16 éléments de type [1,1,-1,0,0,...,1]
         board_size = self.__board_instance.get_size()
+
+        board = tuple(board) # On ne peut pas se servir d'une liste en clé de dict
         if board in mem_hex:
             return mem_hex[board]
         # on teste si la partie est finie
-        if self.__board_instance.win_team(-1):
-            mem_hex[board] = -1
-            return -1
-        elif self.__board_instance.win_team(1):
-            mem_hex[board] = 1
-            return 1
+        f1, f2 = board.win_team(-1), board.win_team(1)
+        if f1 or f2:
+            if f1:
+                e = -1
+                mem_hex[board] = e
+                return e
+            e = 1
+            mem_hex[board] = e
+            return e
+        e = None # La partie n'est pas terminée 
         # on cherche à qui est le tour
-        nb_blue, nb_red = 0, 0
-        for coordinates, box_instance in board.items():
-            if box_instance.get_color() == 1:
-                nb_blue += 1
-            elif box_instance.get_color() == -1:
-                nb_red += 1
-
-        tour = nb_red == nb_blue  # indique si c'est au tour de l'IA ou du joueur
+        total = sum(board)
+        tour = (total == 0)  # Indique si c'est au player de jouer
         joueur = 1 if tour else -1  # joueur dont c'est le tour
-        # on fait la liste des coups possibles, c'est à dire les nouveaux plateaux obtenables
+        # on fait la liste des coups possibles, c'est-à-dire les nouveaux plateaux obtenables
         L = []
-        for i in range(board_size ** board_size):
-            if board[i] == 0:
-                # construire un plateau avec un nouveau pion dans cette case
+        for i in range(board_size * board_size):
+            if self.__database_instance.board_to_string(self.__board_instance.get_board().copy()) == 0:
+                # construire un plateau avec un nouveau hex coloré dans cette case
                 nouveau = board[0:i] + (joueur,) + board[i + 1:]
                 # le mettre dans L
                 L.append(nouveau)
@@ -75,7 +75,7 @@ class Bot:
         evaluation = -joueur
         plateau_gagnant = [L[0]]
         for p in L:
-            e = self.resoud_hex(p)
+            e = self.resoud_hex(p)[0]
             if tour and e > evaluation:
                 evaluation = e
                 if len(p) <= plateau_gagnant[-1]:
