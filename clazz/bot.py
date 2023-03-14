@@ -11,7 +11,8 @@ class Bot:
 
         self.__file = file.File()
 
-        self.__mem_hex_IA = []
+        self.__mem_hex_IA = dict()
+        self.__win_mem_hex_IA = []
         self.__win_moves_IA = dict()
 
         self.__mem_hex_player = dict()
@@ -39,8 +40,9 @@ class Bot:
     #    mem_hex[board] = board.win_team()[1]
 
     def resoud_hex(self):
-        mem_hex = self.__mem_hex_IA
-        board = self.__board_instance.get_board()
+        mem_hex = self.__mem_hex_IA   #qui est un dictionnaire
+        board = self.__database_instance.board_to_string(self.__board_instance.get_board().copy())
+        #board est une liste de 16 éléments de type [1,1,-1,0,0,...,1]
         board_size = self.__board_instance.get_size()
         if board in mem_hex:
             return mem_hex[board]
@@ -71,34 +73,21 @@ class Bot:
                 L.append(nouveau)
         # on cherche l'eval max si c'est au tour de croix, et l'eval min si c'est au tour de rond
         evaluation = -joueur
+        plateau_gagnant = [L[0]]
         for p in L:
             e = self.resoud_hex(p)
             if tour and e > evaluation:
                 evaluation = e
+                if len(p) <= plateau_gagnant[-1]:
+                    plateau_gagnant.append(p)
             elif (not tour) and e < evaluation:
                 evaluation = e
+                if len(p) <= plateau_gagnant[-1]:
+                    plateau_gagnant.append(p)
         mem_hex[board] = evaluation
-        return evaluation
+        return (evaluation,plateau_gagnant)
 
-    def win_IA(self):
-        board = self.__board_instance
-        tour = board.get_tour()
-        inter = self.__file  # inter est une file de tuples de coordonnées
-        for coords, box in board.get_board().items():
-            if box.get_color() == -1 and box.get_y() == 0:  # si la couleur de la case est rouge
-                self.__mem_hex_IA.append(box)
 
-        for box in self.__mem_hex_IA:
-            L = []  # j'ai remplacé un dictionnaire par une liste
-            inter.enfiler(box)
-            while not inter.est_vide():
-                case = inter.defiler()
-                for coords_voisins in board[case].neighbours_same_color():
-                    if coords_voisins not in L:
-                        inter.enfiler(coords_voisins)
-                        L.append(board[coords_voisins])
-            if case.get_y() == board.get_size() - 1:
-                pass
 
     # def path_finding(self):
     #     board = self.__board_instance.get_board()

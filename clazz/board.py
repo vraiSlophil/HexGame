@@ -1,5 +1,6 @@
 # classe pour représenter un plateau de jeu de hex, de 5x5 cases
 from clazz import boxes
+from clazz import file
 
 
 # Rouge : bas en haut, couleur : -1 / Bleu : gauche à droite, couleur : 1
@@ -9,6 +10,7 @@ class Board:
         self.__board = {(x, y): boxes.Box(x, y, size, self) for y in range(size + 1) for x in range(size + 1)}
         # n taille du plateau
         self.__size = size
+        self.__win_mem_hex = []
 
     def __hash__(self):
         return hash((frozenset(self.__board.items()), self.__size))
@@ -34,31 +36,31 @@ class Board:
         tour = nb_red == nb_blue  # indique si c'est au tour de l'IA ou du joueur
         return 1 if tour else -1  # joueur dont c'est le tour
 
-    def win_team(self,
-                 nb_color=0):  # renvoie True si la couleur passée en argument gagne et False sinon. renvoie False si la couleur est 0
-        if nb_color == 0:
+    def win_team(self,color=0):
+        if color == 0:
             return False
+        inter = self.__file  # inter est une file de tuples de coordonnées
+        for coords, box in self.get_board().items():
+            if color == -1:
+                if box.get_color() == -1 and box.get_y() == 0:  # si la couleur de la case est rouge
+                    self.__win_mem_hex.append(box)
+            else:
+                if box.get_color() == 1 and box.get_x() == 0:  # si la couleur de la case est bleue
+                    self.__win_mem_hex.append(box)
 
-        mem_boxes = []
-        # On parcours d'abord le plateau pour mémoriser les coordonnées des boxes se situant sur une extrémité du plateau
-        for coords, b in self.__board.items():  # b est une boxe
-            if b.get_color() == nb_color:
-                if nb_color == -1 and b.get_y() == 0:  # pour mémoriser les coordonnées des boxes rouges se trouvant en bas du plateau
-                    mem_boxes.append(b.get_coords())
-                if nb_color == 1 and b.get_x() == 0:  # pour mémoriser les coordonnées des boxes bleues se trouvant à gauche du plateau
-                    mem_boxes.append(b.get_coords())
-
-        # On regarde les voisins de chaque boxe dont les coordonnées se trouvent dans mem_boxes et rajoute les coordonnées de ces voisins dans mem_boxes
-        nb_new_elements = len(mem_boxes) - 1
-        for i in range(nb_new_elements):
-            for coords_neighbours in self.__board[mem_boxes[i]].get_neighbours_same_color():
-                if nb_color == -1 and coords_neighbours[1] == self.__size:
+        for box in self.__win_mem_hex:
+            L = []  # j'ai remplacé un dictionnaire par une liste pour stocker les coordonnées des voisins de même couleur
+            inter.enfiler(box)
+            while not inter.est_vide():
+                case = inter.defiler() # case est une box
+                for coords_voisins in case.neighbours_same_color():
+                    if coords_voisins not in L:
+                        inter.enfiler(coords_voisins)
+                        L.append(coords_voisins)
+                if color == -1 and case.get_y() == self.get_size() - 1:
                     return True
-                if nb_color == 1 and coords_neighbours[0] == self.__size:
+                if color == 1 and case.get_x == self.get_size() -1:
                     return True
-                if coords_neighbours not in mem_boxes:
-                    mem_boxes.append(coords_neighbours)
-                    nb_new_elements += 1
         return False
 
     def play(self, coordinates, color):
