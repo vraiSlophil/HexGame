@@ -33,7 +33,7 @@ class Box:
     def get_color(self):
         return self.__color
 
-    def get_neighbours_same_color(self):  #renvoie les coordonnées des voisins ayant la même couleur. S'il n'a pas de voisin de même couleur, renvoie une liste vide
+    def get_neighbours_same_color(self):  # renvoie les coordonnées des voisins ayant la même couleur. S'il n'a pas de voisin de même couleur, renvoie une liste vide
         r = []
         for i in self.__box_access:
             for k, v in self.__board_instance.get_board().items():

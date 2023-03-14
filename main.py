@@ -26,10 +26,10 @@ def get_mouse_click_rect(souris):  # détecte le rectangle sur lequel on a cliqu
     if souris[0] == 1:
         pos_mouse = pygame.mouse.get_pos()
         print(pos_mouse)
-        for i in screen.elements_group:
+        for i in screen.get_elements_group():
             if i.rect.collidepoint(pos_mouse[0], pos_mouse[1]):  # chercher s'il y a une collision avec les rectangles
                 return i  # retourne l'instance sur laquelle on a cliqué avec la souris
-        for i in screen.box_sprite_group:
+        for i in screen.get_box_sprite_group():
             if i.rect.collidepoint(pos_mouse[0], pos_mouse[1]):  # chercher s'il y a une collision avec les cases
                 return i
 
@@ -48,14 +48,17 @@ def get_database():
 
 while marche:
     events = pygame.event.get()
+    touches = pygame.key.get_pressed()
+    souris = pygame.mouse.get_pressed()
     for e in events:
         if e.type == pygame.KEYDOWN:
             if e.key == pygame.K_ESCAPE:
                 marche = False
         if e.type == QUIT:
             pygame.quit()
-    touches = pygame.key.get_pressed()
-    souris = pygame.mouse.get_pressed()
+
+    get_click = get_mouse_click_rect(souris)
+    print(get_click)
 
     screen.update()
     pygame.display.update()  # on met à jour l'affichage

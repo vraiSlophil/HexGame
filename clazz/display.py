@@ -11,51 +11,56 @@ class Screen:
         self.__height = height  # hauteur de l'écran
         self.list_boxes = list_boxes  # la liste des instances boxes
         self.__screen = pygame.display.set_mode((self.__width, self.__height))  # création de l'affichage
-        pygame.display.set_caption("Hex")  # juste un titre pour la fenêtre
-        self.box_sprite_group = pygame.sprite.Group()  # on fait des groupes de sprites pour les update
-        self.elements_group = pygame.sprite.Group()    # plus facilement
-        self.img_hex = img_hex  # une image d'hexagone vide
-        self.imgsize = 64  # taille de l'image en pixels
+        pygame.display.set_caption("Hex game")  # juste un titre pour la fenêtre
+        self.__box_sprite_group = pygame.sprite.Group()  # on fait des groupes de sprites pour les update
+        self.__elements_group = pygame.sprite.Group()  # plus facilement
+        self.__img_hex = img_hex  # une image d'hexagone vide
+        self.__imgsize = 64  # taille de l'image en pixels
 
-        self.grid = GridRect(100, 100)  # des valeurs bateau
-        self.elements_group.add(self.grid)  # ajoute l'élément grid dans le groupe des éléments de l'écran
-        # apparemment, self.grid n'est pas valide pour un groupe
-        for i in self.list_boxes:  # on relie chaque instance box avec une instance de sprite
-            sprite_box = BoxSprite(i, self.img_hex, self.imgsize)
-            self.box_sprite_group.add(sprite_box)
+        for box_instance in self.list_boxes.values():  # on relie chaque instance box avec une instance de sprite
+            sprite_box = BoxSprite(box_instance, self.__img_hex, self.__imgsize)
+            self.__box_sprite_group.add(sprite_box)
+
+        #
+        # self.button1 = Button((200, 100), (64, 64), "test", "")  # un bouton de test
+        # self.__elements_group.add(self.button1)
+        #
+        # self.button2 = Button((200, 300), (64, 64), "test", "")  # un bouton de test
+        # self.__elements_group.add(self.button2)
 
     def get_screen(self):
         return self.__screen
 
+    def get_box_sprite_group(self):
+        return self.__box_sprite_group
+
+    def get_elements_group(self):
+        return self.__elements_group
+
     def update(self):
-        self.__screen.fill((0, 0, 0))  # on remplit l'écran de noir pour effacer l'image précédente
+        self.__screen.fill((255, 255, 255))  # on remplit l'écran d'une couleur pour effacer l'image précédente
         # mettre à jour tous les éléments
-        self.box_sprite_group.update()
-        self.elements_group.update()
-        self.elements_group.draw(self.__screen)  # on imprime les sprites sur la surface
-        self.box_sprite_group.draw(self.__screen)
-
-
-class GridRect(pygame.sprite.Sprite):  # ca sera l'espace contenant la grille de jeu
-    def __init__(self, width, length):
-        super().__init__(self)
-        self.image = pygame.Rect(0, 0, width, length)  # temporaire
-
+        self.__box_sprite_group.update()
+        self.__elements_group.update()
+        # on imprime les sprites sur l'écran
+        self.__box_sprite_group.draw(self.__screen)
+        self.__elements_group.draw(self.__screen)
 
 
 class BoxSprite(pygame.sprite.Sprite):  # l'instance graphique d'une case
     def __init__(self, box, img, imgsize):
         pygame.sprite.Sprite.__init__(self)
-        self.image = img  # on charge l'image de base
+        self.image = img  # il faudra mettre 'img = pygame.image.load("imagedelhexagone")' pour éviter d'aller chercher
+        # dans la memoire trop souvent
         self.image = pygame.transform.scale(self.image, (imgsize, imgsize))  # on ajuste l'image a la bonne taille
         self.rect = self.image.get_rect()  # on récupère les dimensions de l'image pour en faire celles du sprite
-        self.box = box  # on garde en mémoire l'instance non graphique de la case
-        self.rect.x = -1*self.box.get_x()*imgsize  # imgsize : dimensions de l'image dans le rendu
-        self.rect.Y = self.box.get_y()*imgsize  # Il faudra changer après pour avoir une grille en losange
+
+        self.rect.x = (box_instance.get_x() * imgsize) + 16  # imgsize : dimensions de l'image dans le rendu
+        self.rect.y = -(box_instance.get_y() * imgsize)
 
     def update(self):
-        color = self.box.get_color()  # on change la case de couleur en fonction de la valeur de son instance
-        if color == 1:                # non-graphique
+        color = 0  # self.box.get_color()  # on change la case de couleur en fonction de la valeur de son instance
+        if color == 1:  # non-graphique
             self.image = hexa1
         elif color == 0:
             self.image = hexa0
@@ -63,6 +68,27 @@ class BoxSprite(pygame.sprite.Sprite):  # l'instance graphique d'une case
             self.image = hexa_1
 
 
-def text_image(text, police, colorRGB): # Pourquoi cette fonction ? ->
-    image = police.render(text, 1, colorRGB)  # crée une image contenant du texte avec une certaine couleur
-    return image
+class Button(pygame.sprite.Sprite):
+    def __init__(self, pos, size, category, text_to_display):
+        pygame.sprite.Sprite.__init__(self)
+        self.pos = pos
+        self.size = size
+        self.category = category  # pour déterminer l'action à faire
+        self.image = hexa0  # pour charger l'image du cadre, à changer après
+        self.image = pygame.transform.scale(self.image, (self.size[0], self.size[1]))
+        self.rect = self.image.get_rect()
+        self.rect.x, self.rect.y = self.pos
+        self.police = pygame.font.SysFont("arial", 15)  # on charge la police d'écriture, on pourra changer
+        self.text = text_image(text_to_display, self.police, (0, 0, 0))  # on charge le texte
+        self.image.blit(self.text, (self.rect.width / 2 - self.text.get_width() / 2,  # on colle le texte sur le
+                                    self.rect.height / 2 - self.text.get_height() / 2))  # milieu du bouton
+
+    def update(self):
+        pass
+
+
+def text_image(text, police, colorRGB):  # attention, il faudrait coller ça sur la surface d'un SPRITE
+    text = police.render(text, True, colorRGB, None)  # crée une image contenant du texte avec une certaine couleur
+    textRect = text.get_rect()
+    textRect.center = (0, 0)
+    return text
