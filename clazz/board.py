@@ -23,6 +23,14 @@ class Board:
     def get_board(self):
         return self.__board
 
+    def get_tour(self):
+        temp = 0
+        for box_instance in self.__board.values():
+            temp += box_instance.get_color()
+            if temp == 0:
+                return 1
+            return -1
+
     def get_size(self):
         return self.__size
 

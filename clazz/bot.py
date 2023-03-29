@@ -53,14 +53,14 @@ class Bot:
         if f1 or f2:
             if f1:
                 e = -1
-                mem_hex[board] = e
+                mem_hex[brd] = e
                 return e
             e = 1
-            mem_hex[board] = e
+            mem_hex[brd] = e
             return e
         e = None # La partie n'est pas terminée 
         # on cherche à qui est le tour
-        total = sum(board)
+        total = sum(int_board)
         tour = (total == 0)  # Indique si c'est au player de jouer
         joueur = 1 if tour else -1  # joueur dont c'est le tour
         # on fait la liste des coups possibles, c'est-à-dire les nouveaux plateaux obtenables
@@ -68,7 +68,7 @@ class Bot:
         for i in range(board_size * board_size):
             if self.__database_instance.board_to_string(self.__board_instance.get_board().copy()) == 0:
                 # construire un plateau avec un nouveau hex coloré dans cette case
-                nouveau = board[0:i] + (joueur,) + board[i + 1:]
+                nouveau = int_board[0:i] + (joueur,) + int_board[i + 1:]
                 # le mettre dans L
                 L.append(nouveau)
         # on cherche l'eval max si c'est au tour de croix et l'eval min si c'est au tour de rond

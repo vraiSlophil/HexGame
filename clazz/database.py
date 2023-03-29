@@ -1,4 +1,5 @@
 import mariadb
+from clazz.bot import Bot
 
 class Database:
     def __init__(self):
@@ -18,7 +19,7 @@ class Database:
 
     # exemple de return : "0,0,0,0,0,0,1,0,0,0,0,-1,0,0,0,0"
     def board_to_string(self, board_instance):
-        L = ""
+        S = "" # S est un string
         for box_instance in board_instance.get_board().values():
             if len(L) != board_instance.get_size() ** board_instance.get_size():
                 L.append(str(box_instance.get_color()) + ",")
@@ -39,4 +40,19 @@ class Database:
             index += 1
         return board_instance
 
+    def board_to_int(self,brd):
+        board_int = []
+        for case in brd.values():
+            board_int.append(case.get_color())
+        return board_int
+
+    def int_to_string(self,brd):
+        string = ""
+        for i in range(len(brd)):
+            string += brd[i] + ","
+
+        return string
+
+    def insert_board(self, board):
+        self.__connect().cursor().execute("INSERT INTO board(board_state, evaluation, player, diff) VALUES (?,?,?);",(self.board_to_string(board), Bot.resoud_hex(board)), board.get_tour())
 
