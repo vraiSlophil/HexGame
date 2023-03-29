@@ -1,5 +1,5 @@
 # classe pour représenter un plateau de jeu de hex, de 5x5 cases
-from clazz import boxes
+from src import boxes
 
 
 # Rouge : bas en haut, couleur : -1 / Bleu : gauche à droite, couleur : 1

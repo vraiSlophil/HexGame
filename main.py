@@ -2,10 +2,10 @@ import pygame
 from pygame import QUIT
 import time
 
-from clazz.board import Board
-from clazz.bot import Bot
-from clazz.database import Database
-from clazz.display import Screen
+from src.board import Board
+from src.bot import Bot
+from src.database import Database
+from src.display import Screen
 from sprites.sprite_library import hexa0
 
 pygame.init()

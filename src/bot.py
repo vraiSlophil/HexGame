@@ -1,4 +1,4 @@
-from clazz import file
+from src import file
 
 
 # Le bot est de couleur rouge
