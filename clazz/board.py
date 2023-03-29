@@ -1,11 +1,10 @@
 # classe pour représenter un plateau de jeu de hex, de 5x5 cases
 from clazz import boxes
-from clazz import file
 
 
 # Rouge : bas en haut, couleur : -1 / Bleu : gauche à droite, couleur : 1
 class Board:
-    def __init__(self, size=3):
+    def __init__(self, size=4):
         # dictionnaire qui contient les coordonnées x et y en tuple en clé et une instance de box en valeur
         self.__board = {(x, y): boxes.Box(x, y, size, self) for y in range(size + 1) for x in range(size + 1)}
         # n taille du plateau
@@ -44,7 +43,7 @@ class Board:
         tour = nb_red == nb_blue  # indique si c'est au tour de l'IA ou du joueur
         return 1 if tour else -1  # joueur dont c'est le tour
 
-    def win_team(self,color=0):
+    def win_team(self, color=0):
         if color == 0:
             return False
         inter = self.__file  # inter est une file de tuples de coordonnées
@@ -60,14 +59,14 @@ class Board:
             L = []  # j'ai remplacé un dictionnaire par une liste pour stocker les coordonnées des voisins de même couleur
             inter.enfiler(box)
             while not inter.est_vide():
-                case = inter.defiler() # case est une box
+                case = inter.defiler()  # case est une box
                 for coords_voisins in case.neighbours_same_color():
                     if coords_voisins not in L:
                         inter.enfiler(coords_voisins)
                         L.append(coords_voisins)
                 if color == -1 and case.get_y() == self.get_size() - 1:
                     return True
-                if color == 1 and case.get_x == self.get_size() -1:
+                if color == 1 and case.get_x == self.get_size() - 1:
                     return True
         return False
 

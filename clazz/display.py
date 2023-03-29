@@ -55,18 +55,28 @@ class BoxSprite(pygame.sprite.Sprite):  # l'instance graphique d'une case
         # dans la memoire trop souvent
         self.image = pygame.transform.scale(self.image, (imgsize, imgsize))  # on ajuste l'image a la bonne taille
         self.rect = self.image.get_rect()  # on récupère les dimensions de l'image pour en faire celles du sprite
+        self.box_instance = box_instance
+        x = box_instance.get_x()
+        y = box_instance.get_y()
+        self.rect.x = (x * imgsize) + (32 * y)  # imgsize : dimensions de l'image dans le rendu
+        self.rect.y = (y * imgsize)
+        self.img_size = imgsize
 
-        self.rect.x = (box_instance.get_x() * imgsize) + 16  # imgsize : dimensions de l'image dans le rendu
-        self.rect.y = -(box_instance.get_y() * imgsize)
+    def play(self, board_instance):
+        if self.box_instance.get_color() == 0: # on vérifie que la case n'a pas déjà une couleur
+            self.box_instance.set_color(board_instance.get_tour()) # on change la case de couleur en fonction de la valeur de son instance
 
     def update(self):
-        color = 0  # self.box.get_color()  # on change la case de couleur en fonction de la valeur de son instance
+        color = self.box_instance.get_color()  # on change la case de couleur en fonction de la valeur de son instance
         if color == 1:  # non-graphique
             self.image = hexa1
+            self.image = pygame.transform.scale(self.image, (self.img_size, self.img_size))
         elif color == 0:
             self.image = hexa0
+            self.image = pygame.transform.scale(self.image, (self.img_size, self.img_size))
         else:
             self.image = hexa_1
+            self.image = pygame.transform.scale(self.image, (self.img_size, self.img_size))
 
 
 class Button(pygame.sprite.Sprite):
@@ -86,7 +96,6 @@ class Button(pygame.sprite.Sprite):
 
     def update(self):
         pass
-
 
 def text_image(text, police, colorRGB):  # attention, il faudrait coller ça sur la surface d'un SPRITE
     text = police.render(text, True, colorRGB, None)  # crée une image contenant du texte avec une certaine couleur

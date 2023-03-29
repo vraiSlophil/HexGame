@@ -1,5 +1,6 @@
 import pygame
 from pygame import QUIT
+import time
 
 from clazz.board import Board
 from clazz.bot import Bot
@@ -12,7 +13,7 @@ pygame.init()
 img_hex_void = hexa0
 
 board = Board()
-screen = Screen(854, 480, board.get_board(), img_hex_void)
+screen = Screen(800, 500, board.get_board(), img_hex_void)
 database = Database()
 bot = Bot(board, database)
 
@@ -29,7 +30,6 @@ coords_blue = []
 def get_mouse_click_rect(souris):  # détecte le rectangle sur lequel on a cliqué avec la souris
     if souris[0] == 1:
         pos_mouse = pygame.mouse.get_pos()
-        print(pos_mouse)
         for i in screen.get_elements_group():
             if i.rect.collidepoint(pos_mouse[0], pos_mouse[1]):  # chercher s'il y a une collision avec les rectangles
                 return i  # retourne l'instance sur laquelle on a cliqué avec la souris
@@ -50,6 +50,9 @@ def get_database():
     return database
 
 
+# for box_instance in board.get_board().values():
+#     box_instance.set_color(1)
+
 while marche:
     events = pygame.event.get()
     touches = pygame.key.get_pressed()
@@ -62,8 +65,9 @@ while marche:
             pygame.quit()
 
     get_click = get_mouse_click_rect(souris)
-    print(get_click)
-
+    if get_click != None:
+        get_click.play(board)
+        time.sleep(0.3)
     screen.update()
     pygame.display.update()  # on met à jour l'affichage
     clock.tick(fps)  # pour que la boucle n'aille pas trop vite (limitée à 30 millièmes de seconde)

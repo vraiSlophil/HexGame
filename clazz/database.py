@@ -1,6 +1,7 @@
 import mariadb
 from clazz.bot import Bot
 
+
 class Database:
     def __init__(self):
         self.__connect = mariadb.connect(
@@ -21,12 +22,8 @@ class Database:
     def board_to_string(self, board_instance):
         S = "" # S est un string
         for box_instance in board_instance.get_board().values():
-            if len(L) != board_instance.get_size() ** board_instance.get_size():
-                L.append(str(box_instance.get_color()) + ",")
-            else:
-                L.append(str(box_instance.get_color()))
-
-        return L
+            S += (str(box_instance.get_color()) + ",")
+        return S
 
     # return une nouvelle instance de board
     def string_to_board(self, board_instance, L):

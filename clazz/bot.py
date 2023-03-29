@@ -1,5 +1,6 @@
 from clazz import file
 
+
 # Le bot est de couleur rouge
 class Bot:
     def __init__(self, board_instance, database_instance):
@@ -46,15 +47,19 @@ class Bot:
     # if board.win_team()[0] == True:
     #    mem_hex[board] = board.win_team()[1]
 
-    def resoud_hex(self):
-        mem_hex = self.__mem_hex_IA   #qui est un dictionnaire
-        board = self.__database_instance.board_to_string(self.__board_instance.get_board().copy())
-        #board est une liste de 16 éléments de type [1,1,-1,0,0,...,1]
+    def resoud_hex(self, brd = None):  # brd est un board
+        if brd == None:
+            brd = self.__board_instance
+
+
+        mem_hex = self.__mem_hex_IA  # qui est un dictionnaire
+        string_board = self.__database_instance.board_to_string(brd.copy())
+        int_board = self.__database_instance.board_to_int(brd.copy())
+        # int_board est une liste de 16 éléments de type [1,1,-1,0,0,...,1]
         board_size = self.__board_instance.get_size()
 
-        board = tuple(board) # On ne peut pas se servir d'une liste en clé de dict
-        if board in mem_hex:
-            return mem_hex[board]
+        if string_board in mem_hex:
+            return mem_hex[string_board]
         # on teste si la partie est finie
         f1, f2 = brd.win_team(-1), brd.win_team(1)  # f1 correspond au bot et f2 au joueur
         if f1 or f2:
@@ -65,7 +70,7 @@ class Bot:
             e = 1
             mem_hex[brd] = e
             return e
-        e = None # La partie n'est pas terminée 
+        e = None  # La partie n'est pas terminée
         # on cherche à qui est le tour
         total = sum(int_board)
         tour = (total == 0)  # Indique si c'est au player de jouer
@@ -88,12 +93,10 @@ class Bot:
                 # plateau_gagnant = p
             elif (not tour) and e < evaluation:
                 evaluation = e
-                if len(p) <= plateau_gagnant[-1]:
-                    plateau_gagnant.append(p)
-        mem_hex[board] = evaluation
-        return (evaluation,plateau_gagnant)
-
-
+                # if self.diff_plateaux(p) <= self.diff_plateaux(plateau_gagnant):
+            #  plateau_gagnant = p
+        mem_hex[string_board] = evaluation
+        return evaluation
 
     # def path_finding(self):
     #     board = self.__board_instance.get_board()
