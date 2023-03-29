@@ -8,7 +8,7 @@ class Bot:
         self.__tour = False  # True si c'est au tour du bot, False sinon
         self.__board_instance = board_instance
         self.__database_instance = database_instance
-
+        self.__L = []  # liste contenant les coups possibles à  faire juste après, c'est-à-dire tous les nouveaux plateaux obtenables en un coup
         self.__file = file.File()
 
         self.__mem_hex_IA = dict()
@@ -28,9 +28,16 @@ class Bot:
         if self.__tour:
             pass
 
+    def get_L(self):
+        return self.__L
+
     def replace_blue_box(self):
         if self.__tour:
             pass
+
+    def get_next_move(self):
+        boards = self.__database_instance.select_next_boards_to_IA()
+
 
     # def best_move(self):
     # board = self.__board_instance.get_board()
@@ -49,7 +56,7 @@ class Bot:
         if board in mem_hex:
             return mem_hex[board]
         # on teste si la partie est finie
-        f1, f2 = board.win_team(-1), board.win_team(1)
+        f1, f2 = brd.win_team(-1), brd.win_team(1)  # f1 correspond au bot et f2 au joueur
         if f1 or f2:
             if f1:
                 e = -1
@@ -63,23 +70,22 @@ class Bot:
         total = sum(int_board)
         tour = (total == 0)  # Indique si c'est au player de jouer
         joueur = 1 if tour else -1  # joueur dont c'est le tour
-        # on fait la liste des coups possibles, c'est-à-dire les nouveaux plateaux obtenables
-        L = []
+
         for i in range(board_size * board_size):
             if self.__database_instance.board_to_string(self.__board_instance.get_board().copy()) == 0:
                 # construire un plateau avec un nouveau hex coloré dans cette case
                 nouveau = int_board[0:i] + (joueur,) + int_board[i + 1:]
                 # le mettre dans L
-                L.append(nouveau)
+                self.__L.append(nouveau)
         # on cherche l'eval max si c'est au tour de croix et l'eval min si c'est au tour de rond
         evaluation = -joueur
-        plateau_gagnant = [L[0]]
-        for p in L:
-            e = self.resoud_hex(p)[0]
+
+        for p in self.__L:
+            e = self.resoud_hex(p)
             if tour and e > evaluation:
                 evaluation = e
-                if len(p) <= plateau_gagnant[-1]:
-                    plateau_gagnant.append(p)
+                # if self.diff_plateaux(p) < self.diff_plateau(plateau_gagnant):
+                # plateau_gagnant = p
             elif (not tour) and e < evaluation:
                 evaluation = e
                 if len(p) <= plateau_gagnant[-1]:

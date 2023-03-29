@@ -56,3 +56,5 @@ class Database:
     def insert_board(self, board):
         self.__connect().cursor().execute("INSERT INTO board(board_state, evaluation, player, diff) VALUES (?,?,?);",(self.board_to_string(board), Bot.resoud_hex(board)), board.get_tour())
 
+    def select_next_boards_to_IA(self, board):
+        return list(self.__connect().cursor().execute("SELECT board_state FROM board WHERE evaluation = 1 AND player = -1 AND ? = board_state;",(Bot.get_L()))
