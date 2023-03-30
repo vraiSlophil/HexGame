@@ -37,7 +37,11 @@ class Bot:
             pass
 
     def get_next_move(self):
-        boards = self.__database_instance.select_next_boards_to_IA()
+        boards = self.__database_instance.select_next_boards_to_IA() # liste de plateaux en int avec les prochains plateaux gagnants
+        for cases in self.__board_instance:
+            pass
+        
+        
 
 
     # def best_move(self):
