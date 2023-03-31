@@ -62,9 +62,9 @@ class BoxSprite(pygame.sprite.Sprite):  # l'instance graphique d'une case
         self.rect.y = (y * imgsize) + 50
         self.img_size = imgsize
 
-    def play(self, board_instance):
-        if self.box_instance.get_color() == 0: # on vérifie que la case n'a pas déjà une couleur
-            self.box_instance.set_color(board_instance.get_tour()) # on change la case de couleur en fonction de la valeur de son instance
+    def play(self):
+        self.box_instance.play()
+
 
     def update(self):
         color = self.box_instance.get_color()  # on change la case de couleur en fonction de la valeur de son instance

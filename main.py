@@ -1,6 +1,5 @@
 import pygame
 from pygame import QUIT
-import time
 
 from src.board import Board
 from src.bot import Bot
@@ -71,8 +70,10 @@ while marche:
     get_click = get_mouse_click_rect(souris)
     lastmousepos = souris[0]
     if get_click != None:
-        get_click.play(board)
-        time.sleep(0.3)
+        get_click.play()
+    for i in screen.get_elements_group():
+        if type(i) == Button and i.category == 'counter':
+            i.edit_text(str(tick))
     screen.update()
     pygame.display.update()  # on met à jour l'affichage
     tick += 1

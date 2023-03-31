@@ -3,6 +3,12 @@ class File:
         self.__data = []
         self.__tete = 0
 
+    def __len__(self):
+        return len(self.__data) - self.__tete
+
+    def __str__(self):
+        return str(self.__data[self.__tete:].__str__())
+
     def enfiler(self, e):
         self.__data.append(e)
 
@@ -19,5 +25,6 @@ class File:
     def est_vide(self):
         return len(self) == 0
 
-    def __len__(self):
-        return len(self.__data) - self.__tete
+    def get_data(self):
+        return self.__data[self.__tete:]
+

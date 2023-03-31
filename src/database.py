@@ -9,8 +9,8 @@ class Database:
             user="root",
             password="",
             host="localhost",
-            # port=3307,
-            port=3306,
+            port=3307,
+            # port=3306,
             database="HexGame"
         )
 
