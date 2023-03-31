@@ -65,7 +65,7 @@ class Database:
         plateaux = list(self.__connect().cursor().execute(
             "SELECT board_state FROM board WHERE evaluation = 1 AND player = -1 AND ? = board_state;",
             (self.int_to_string(Bot.get_L()))))
-        plateaux_int = []
+        plateaux_board = []
         for p in plateaux:
-            plateaux_int.append(self.string_to_int(p))
-        return plateaux_int
+            plateaux_board.append(self.string_to_board(p))
+        return plateaux_board

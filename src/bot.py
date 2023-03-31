@@ -36,10 +36,12 @@ class Bot:
         if self.__tour:
             pass
 
-    def get_next_move(self):
-        boards = self.__database_instance.select_next_boards_to_IA() # liste de plateaux en int avec les prochains plateaux gagnants
-        for cases in self.__board_instance:
-            pass
+    def get_next_move(self):  #renvoie les coords
+        board = self.__database_instance.select_next_boards_to_IA()[0] # premier plateau de la liste des plateaux qui vont gagner avec un coup en plus
+        for coords_a,box_a in self.__board_instance.items():
+            for coords_b,box_b in boards.items():
+                if coords_a == coords_b and box_a != box_b:
+                    return coords_a
         
         
 

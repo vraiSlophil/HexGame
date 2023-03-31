@@ -2,7 +2,7 @@
 from src import boxes
 
 
-# Rouge : bas en haut, couleur : -1 / Bleu : gauche à droite, couleur : 1
+# Rouge : bas en haut, couleur : -1   /   Bleu : gauche à droite, couleur : 1
 class Board:
     def __init__(self, size=4):
         # dictionnaire qui contient les coordonnées x et y en tuple en clé et une instance de box en valeur
