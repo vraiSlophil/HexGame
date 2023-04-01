@@ -66,10 +66,10 @@ class Board:
                     if box_instance_neighbour not in self.__win_mem_hex:
                         available_path.enfiler(box_instance_neighbour)
                         self.__win_mem_hex.append(box_instance_neighbour)
-                if color == -1 and case.get_y() == self.get_size() - 1:
-                    return True
-                if color == 1 and case.get_x == self.get_size() - 1:
-                    return True
-        print("available_path : [" + ", ".join(str(i) for i in available_path.get_data()) + "]")
-        print("win_mem_hex : [" + ", ".join(str(e) for e in self.__win_mem_hex) + "]")
+                        if color == -1 and case.get_y() == self.get_size() - 1:
+                            return True
+                        if color == 1 and case.get_x == self.get_size() - 1:
+                            return True
+                    print("available_path : [" + ", ".join(str(i) for i in available_path.get_data()) + "]")
+                    print("win_mem_hex : [" + ", ".join(str(e) for e in self.__win_mem_hex) + "]")
         return False
