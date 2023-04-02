@@ -1,6 +1,7 @@
 class ColorError(Exception):
     pass
 
+# Ce fichier a été majoritairement fait par Martin et Nathan L
 
 class Box:
     def __init__(self, x, y, size, board_instance):
@@ -17,6 +18,7 @@ class Box:
                 valid_coords.append(coordinates)
         self.__box_access = valid_coords
 
+        #cette fonction a été faite pour le debuguage afin que la console ne nous affiche plus les adresses mémoires mais les infos des box
     def __str__(self):
         return "[Coordonnées : " + str(self.__coords) + " | Couleur : " + str(self.__color) + " | Accès : " + str(self.__box_access) + "]"
 
@@ -61,13 +63,3 @@ class Box:
         if self.get_color() != 0:
             return
         self.set_color(self.__board_instance.get_tour())
-
-    def __hash__(self):
-        return hash(
-            (self.__x, self.__y, self.__coords, self.__board_instance, self.__color, frozenset(self.__box_access)))
-
-    def __eq__(self, other):  # other est un objet que l'on compare à l'instance de Box
-        if not isinstance(other, Box):
-            return False
-        return self.__x == other.get_x() and self.__y == other.get_y() and self.__coords == other.get_coords() and self.__board_instance == other.__board_instance and self.__color == other.get_color() and frozenset(
-            self.__box_access) == frozenset(other.get_box_access())
