@@ -1,6 +1,6 @@
 import random
 
-
+# Cette classe a été majoritairement faite par Martin et Nathan L
 class Bot:
     def __init__(self, board_instance, database_instance):
         self.color = -1  # rouge
@@ -19,6 +19,8 @@ class Bot:
         self.database.add_board_state(self.board, best_x, best_y)
         self.board.get_board()[best_x, best_y].play()
 
+        
+    # Ici c'est sensé être la fonction dans laquelle l'IA choisit le meilleur coup mais ça a été trop dur
     def get_best_move(self):
         board_size = self.board.get_size()
         x, y = (random.randint(0, board_size), random.randint(0, board_size))
