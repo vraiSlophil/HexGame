@@ -4,6 +4,7 @@ from sprites.sprite_library import hexa1, hexa_1, hexa0, text_frame
 
 pygame.init()
 
+# Cette fonction a été majoritairement faite par Gabin et Nathan O a aidé et bidouillé quelques fois
 
 # classe écran
 class Screen:
