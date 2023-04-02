@@ -2,6 +2,7 @@ from src.boxes import Box
 
 
 # Rouge : bas en haut, couleur : -1   /   Bleu : gauche à droite, couleur : 1
+# Cette classe a été développée par tout le monde mais en majorité Nathan O et Martin
 class Board:
     def __init__(self, size=4):
         # dictionnaire qui contient les coordonnées x et y en tuple en clé et une instance de box en valeur
@@ -52,7 +53,9 @@ class Board:
             self.set_finished(False) if self.is_finished() or self.is_full() else None
             print("Le jeu n'est pas fini")
 
-    def win_team(self, color: int):
+            
+    # La première version de cette fonction était faite par Martin mais ne fonctionnait pas alors Nathan O l'a refaite entièrement
+    def win_team(self, color):
         checked_boxes = set()  # Ici on utilise un set pour éviter de vérifier plusieurs fois la même case car la
         # spécificité du set est de ne pas contenir de doublons
         for coordinates, box_instance in self.__board.items():
@@ -60,8 +63,8 @@ class Board:
                 if coordinates not in checked_boxes:
                     return self.__recu(coordinates, color, checked_boxes)
         return False
-
-    def __recu(self, coordinates: tuple, color: int, checked_boxes: set):
+    # Celle ci aussi
+    def __recu(self, coordinates, color, checked_boxes):
         checked_boxes.add(coordinates)
         print(color)
         print(str(checked_boxes))
