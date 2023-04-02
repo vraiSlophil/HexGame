@@ -10,8 +10,7 @@ class Bot:
     def play(self):
         best_x, best_y = self.database.get_best_move(self.board)
         if best_x is not None and best_y is not None:
-            a = self.board.get_board()[best_x, best_y].play()
-            print(a)
+            self.board.get_board()[best_x, best_y].play()
             return
 
         # Si on arrive ici, cela signifie que le plateau n'a pas été trouvé dans la base de données ou qu'il n'y a pas de meilleur coup connu.
