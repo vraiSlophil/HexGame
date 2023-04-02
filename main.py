@@ -12,7 +12,7 @@ pygame.init()
 img_hex_void = hexa0
 
 board = Board()
-screen = Screen(800, 500, board.get_board(), img_hex_void)
+screen = Screen(1000, 500, board.get_board(), img_hex_void)
 database = Database()
 bot = Bot(board, database)
 
@@ -56,23 +56,11 @@ while marche:
 
     get_click = get_mouse_click_rect(souris)
     lastmousepos = souris[0]
-    if isinstance(get_click, BoxSprite):
+    if isinstance(get_click, BoxSprite) and not board.is_finished():
         get_click.play()
-        if board.win_team(1):
-            print("Le joueur bleu a gagné")
-        elif board.win_team(-1):
-            print("Le joueur rouge a gagné")
-        else:
-            print("Le jeu n'est pas fini")
-
-        if board.get_tour() == -1:
+        if board.get_tour() == -1 and not board.is_full():
             bot.play()
-            if board.win_team(1):
-                print("Le joueur bleu a gagné")
-            elif board.win_team(-1):
-                print("Le joueur rouge a gagné")
-            else:
-                print("Le jeu n'est pas fini")
+        board.update()
 
     for i in screen.get_elements_group():
         if type(i) == Button and i.category == 'counter':

@@ -39,6 +39,7 @@ class Database:
         else:
             return None, None
 
+
     def board_to_string(self, board_instance):
         S = ""  # S est un string
         for box_instance in board_instance.get_board().values():

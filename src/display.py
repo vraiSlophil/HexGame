@@ -23,11 +23,17 @@ class Screen:
             sprite_box = BoxSprite(box_instance, self.__img_hex, self.__imgsize)
             self.__box_sprite_group.add(sprite_box)
         # les images doivent respecter le ratio 60/40 pour pas déformer les pixels
-        self.button1 = Button(((64*6) + (4*32) + 16, 100), (150, 100), "reset", "Réinitialiser le plateau", self.__globalfont)  # un bouton de test
+        self.button1 = Button((600, 100), (250, 50), "reset", "Réinitialiser le plateau", self.__globalfont)  # un bouton de test
         self.__elements_group.add(self.button1)
         #
-        self.button2 = Button(((64*6) + (4*32) + 16, 300), (90, 60), "counter", "", self.__globalfont)  # un bouton de test
+        self.button2 = Button((600, 300), (100, 50), "counter", "", self.__globalfont)  # un bouton de test
         self.__elements_group.add(self.button2)
+
+        self.button3 = Button((600, 200), (400, 24), "message", "Les rouges doivent relier le haut et le bas,", self.__globalfont, False)  # un bouton de test
+        self.__elements_group.add(self.button3)
+
+        self.button4 = Button((604, 226), (400, 24), "message", "les bleus doivent relier la droite et la gauche.", self.__globalfont, False)  # un bouton de test
+        self.__elements_group.add(self.button4)
 
     def get_screen(self):
         return self.__screen
@@ -58,8 +64,8 @@ class BoxSprite(pygame.sprite.Sprite):  # l'instance graphique d'une case
         self.box_instance = box_instance
         x = box_instance.get_x()
         y = box_instance.get_y()
-        self.rect.x = (x * imgsize) + (imgsize/2 * y)  # imgsize : dimensions de l'image dans le rendu
-        self.rect.y = (y * imgsize) + 50
+        self.rect.x = (x * imgsize) + (imgsize/2 * y) + (imgsize/8 * y) + (imgsize/4 * x) + 15
+        self.rect.y = (y * imgsize) + 15
         self.img_size = imgsize
 
     def play(self):
@@ -80,13 +86,17 @@ class BoxSprite(pygame.sprite.Sprite):  # l'instance graphique d'une case
 
 
 class Button(pygame.sprite.Sprite):
-    def __init__(self, pos, size, category, text_to_display, font):
+    def __init__(self, pos, size, category, text_to_display, font, sprite_present=True):
         pygame.sprite.Sprite.__init__(self)
         self.pos = pos
         self.size = size
         self.category = category  # pour déterminer l'action à faire
-        self.image = text_frame  # pour charger l'image du cadre, à changer après
-        self.image = pygame.transform.scale(self.image, (self.size[0], self.size[1]))
+        if sprite_present:
+            self.image = text_frame  # pour charger l'image du cadre, à changer après
+            self.image = pygame.transform.scale(self.image, (self.size[0], self.size[1]))
+        else:
+            self.image = pygame.Surface((self.size[0], self.size[1]))
+            self.image.fill((255, 255, 255))
         self.rect = self.image.get_rect()
         self.rect.x, self.rect.y = self.pos
         self.font = font
