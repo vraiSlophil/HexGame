@@ -20,7 +20,6 @@ class Box:
     def __str__(self):
         return "[Coordonnées : " + str(self.__coords) + " | Couleur : " + str(self.__color) + " | Accès : " + str(self.__box_access) + "]"
 
-
     def get_box_access(self):
         return self.__box_access
 
@@ -46,7 +45,7 @@ class Box:
         return neighbours_same_color
 
     def get_free_neighbours(self):  # renvoie les coordonnées des cases vides voisines
-        neighbours_same_color = []
+        neighbours = []
         for available_boxes in self.__box_access:
             for coordinates, box_instance in self.__board_instance.get_board().items():
                 if coordinates == available_boxes:
@@ -62,12 +61,6 @@ class Box:
         if self.get_color() != 0:
             return
         self.set_color(self.__board_instance.get_tour())
-        if self.__board_instance.win_team(1):
-            print("Le joueur bleu a gagné")
-        elif self.__board_instance.win_team(-1):
-            print("Le joueur rouge a gagné")
-        else:
-            print("Le jeu n'est pas fini")
 
     def __hash__(self):
         return hash(

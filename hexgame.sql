@@ -12,20 +12,10 @@ DROP TABLE IF EXISTS `board`;
 CREATE TABLE IF NOT EXISTS `board` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `board_state` text NOT NULL,
-  `evaluation` int(11) NOT NULL,
-  `player` int(11) NOT NULL,
+  `best_x` int(1) NOT NULL,
+  `best_y` int(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-DROP TABLE IF EXISTS `hexgame`;
-CREATE TABLE IF NOT EXISTS `hexgame` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `x` int(11) NOT NULL,
-  `y` int(11) NOT NULL,
-  `box_access` text NOT NULL,
-  `color` text NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
