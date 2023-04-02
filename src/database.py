@@ -1,5 +1,6 @@
 import mariadb
 
+# Cette  classe a été majoritairement faite par les Nathans
 
 class Database:
     def __init__(self):
