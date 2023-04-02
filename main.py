@@ -1,3 +1,6 @@
+# Ce fichier a été fait pour tout centraliser et tou le monde y a touché, mais ce qui concerne l'affichage a été fait à 90% par Gabin et 10% Nathan O
+
+
 import pygame
 from pygame import QUIT
 
@@ -19,7 +22,6 @@ bot = Bot(board, database)
 # Joueur bleu = True et de couleur 1, joueur rouge = False et de couleur -1
 marche = True  # pour gérer la boucle de l'affichage
 tour = True
-fini = False
 
 clock = pygame.time.Clock()
 fps = 30
