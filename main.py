@@ -17,8 +17,7 @@ img_hex_void = hexa0
 board = Board()
 screen = Screen(1000, 500, board.get_board(), img_hex_void)
 database = Database()
-bot = Bot(board, database)
-
+bot = Bot(board)
 # Joueur bleu = True et de couleur 1, joueur rouge = False et de couleur -1
 marche = True  # pour gérer la boucle de l'affichage
 tour = True
