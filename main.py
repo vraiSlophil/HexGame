@@ -1,73 +1,66 @@
-# Ce fichier a été fait pour tout centraliser et tou le monde y a touché, mais ce qui concerne l'affichage a été fait à 90% par Gabin et 10% Nathan O
-
-
 import pygame
-from pygame import QUIT
 
-from sprites.sprite_library import hexa0
+from sprites.sprite_library import Images
 from src.board import Board
 from src.bot import Bot
-from src.database import Database
-from src.display import Screen, Button, BoxSprite
-
-pygame.init()
-
-img_hex_void = hexa0
-
-board = Board()
-screen = Screen(1000, 500, board.get_board(), img_hex_void)
-database = Database()
-bot = Bot(board)
-# Joueur bleu = True et de couleur 1, joueur rouge = False et de couleur -1
-marche = True  # pour gérer la boucle de l'affichage
-tour = True
-
-clock = pygame.time.Clock()
-fps = 30
-tick = 0
-lastmousepos = 0  # pour stocker si on maintient un click (0 pour non, 1 pour oui)
-coords_blue = []
+from src.display import Screen, Button
+from src.boxes import Box
 
 
-def get_database():
-    return database
+def main():
+    BOT_COLOR = -1
+
+    # Initialisation de Pygame
+    pygame.init()
+
+    # Création du plateau de jeu
+    board = Board(size=4)
+
+    # Création du bot
+    bot = Bot(board)
+
+    # Création de l'écran
+    screen = Screen(800, 600, board.get_board(), Images.HEXA0.value)
+
+    # Création de l'horloge
+    clock = pygame.time.Clock()
+
+    # Création d'un bouton
+    button1 = Button('Click me', 150, 40, (10, 400), 3, screen.get_screen())
+    screen.add_button(button1)
+
+    # Boucle principale du jeu
+    running = True
+    while running:
+        # Gestion des événements
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.MOUSEBUTTONDOWN:  # Ajout de la détection du clic de souris
+                pos_mouse = pygame.mouse.get_pos()
+                for i in screen.get_box_sprite_group():
+                    if i.rect.collidepoint(pos_mouse[0], pos_mouse[1]):  # Chercher s'il y a une collision avec les cases
+                        if not board.is_finished(): # Ajout de la condition pour vérifier si le jeu est terminé
+                            i.play()  # Jouer sur la case sur laquelle on a cliqué
+
+                            # Mise à jour de l'état du jeu
+                            board.update()
+
+                # Si c'est le tour du bot, il joue
+                if board.get_tour() == BOT_COLOR and not board.is_full():
+                    bot.play()
+
+        # Mise à jour de l'affichage
+        screen.update()
+
+        # Mise à jour de l'écran
+        pygame.display.flip()
+
+        clock.tick(60)
+
+    # Quitter Pygame à la fin de la boucle
+    pygame.quit()
 
 
-def get_mouse_click_rect(souris):  # détecte le rectangle sur lequel on a cliqué avec la souris
-    if souris[0] == 1 and lastmousepos == 0:  # on vérifie si on a pas clické trop récemment
-        pos_mouse = pygame.mouse.get_pos()
-        for i in screen.get_elements_group():
-            if i.rect.collidepoint(pos_mouse[0], pos_mouse[1]):  # chercher s'il y a une collision avec les rectangles
-                return i  # retourne l'instance sur laquelle on a cliqué avec la souris
-        for i in screen.get_box_sprite_group():
-            if i.rect.collidepoint(pos_mouse[0], pos_mouse[1]):  # chercher s'il y a une collision avec les cases
-                return i
-
-
-while marche:
-    events = pygame.event.get()
-    touches = pygame.key.get_pressed()
-    souris = pygame.mouse.get_pressed()
-    for e in events:
-        if e.type == pygame.KEYDOWN:
-            if e.key == pygame.K_ESCAPE:
-                marche = False
-        if e.type == QUIT:
-            pygame.quit()
-
-    get_click = get_mouse_click_rect(souris)
-    lastmousepos = souris[0]
-    if isinstance(get_click, BoxSprite) and not board.is_finished():
-        get_click.play()
-        if board.get_tour() == -1 and not board.is_full():
-            bot.play()
-        board.update()
-
-    for i in screen.get_elements_group():
-        if type(i) == Button and i.category == 'counter':
-            i.edit_text(str(tick))
-    screen.update()
-    pygame.display.update()  # on met à jour l'affichage
-    tick += 1
-
-    clock.tick(fps)  # pour que la boucle n'aille pas trop vite (limitée à 30 millièmes de seconde)
+if __name__ == "__main__":
+    main()
