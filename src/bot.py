@@ -31,45 +31,28 @@ class Bot:
                 if 0 <= x < board_size and 0 <= y < board_size and self.board.get_board()[(x, y)].get_color() == 0:
                     return x, y
 
-        # Calculer le chemin le plus court pour le bot en passant par le point central
-        shortest_path_bot = self.board.shortest_path((0, 0), center, self.color)
-
-        # Calculer les chemins les plus probables pour le joueur
-        shortest_path_player = self.board.shortest_path((0, 0), center, -self.color)
-
-        # Calculer un indice de risque basé sur les chemins calculés précédemment
-        risk_index = len(shortest_path_player) / len(shortest_path_bot)
-
-        # Si l'indice de risque est élevé, jouer un coup qui bloque le joueur
-        if risk_index > 1:
-            for move in shortest_path_player:
-                if self.board.get_board()[move].get_color() == 0:
-                    return move
-
-        # Sinon, jouer un coup qui avance le bot vers la victoire
-        for move in shortest_path_bot:
-            if self.board.get_board()[move].get_color() == 0:
-                return move
-
-        # Si aucun coup n'est disponible, choisir un coup aléatoire
-        x, y = (random.randint(0, board_size), random.randint(0, board_size))
-        while self.board.get_board()[(x, y)].get_color() != 0:
-            x, y = (random.randint(0, board_size), random.randint(0, board_size))
-        return x, y
-
-    # def minimax(board, depth, maximizingPlayer):
-    #     if depth == 0 or game_over(board):
-    #         return evaluate(board)
-    #
-    #     if maximizingPlayer:
-    #         maxEval = float('-inf')
-    #         for move in get_all_possible_moves(board):
-    #             eval = minimax(make_move(board, move), depth - 1, False)
-    #             maxEval = max(maxEval, eval)
-    #         return maxEval
-    #     else:
-    #         minEval = float('inf')
-    #         for move in get_all_possible_moves(board):
-    #             eval = minimax(make_move(board, move), depth - 1, True)
-    #             minEval = min(minEval, eval)
-    #         return minEval
+        # # Calculer le chemin le plus court pour le bot en passant par le point central
+        # shortest_path_bot = self.board.shortest_path((0, 0), center, self.color)
+        #
+        # # Calculer les chemins les plus probables pour le joueur
+        # shortest_path_player = self.board.shortest_path((0, 0), center, -self.color)
+        #
+        # # Calculer un indice de risque basé sur les chemins calculés précédemment
+        # risk_index = len(shortest_path_player) / len(shortest_path_bot)
+        #
+        # # Si l'indice de risque est élevé, jouer un coup qui bloque le joueur
+        # if risk_index > 1:
+        #     for move in shortest_path_player:
+        #         if self.board.get_board()[move].get_color() == 0:
+        #             return move
+        #
+        # # Sinon, jouer un coup qui avance le bot vers la victoire
+        # for move in shortest_path_bot:
+        #     if self.board.get_board()[move].get_color() == 0:
+        #         return move
+        #
+        # # Si aucun coup n'est disponible, choisir un coup aléatoire
+        # x, y = (random.randint(0, board_size), random.randint(0, board_size))
+        # while self.board.get_board()[(x, y)].get_color() != 0:
+        #     x, y = (random.randint(0, board_size), random.randint(0, board_size))
+        # return x, y
